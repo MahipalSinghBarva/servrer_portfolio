@@ -43,6 +43,18 @@ databaseConnection()
 
 app.use(errorMiddleware);
 
+app.get('/', (req, res) => {
+
+    res.status(200).send({
+
+        message: "API Running Successfully...!",
+        status: true,
+        data: [],
+
+    });
+
+});
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
