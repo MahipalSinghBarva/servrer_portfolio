@@ -73,7 +73,7 @@ exports.updateExperience = catchAsyncError(async (req, res, next) => {
                 Bucket: process.env.AWS_BUCKET_NAME,
                 Key: experience.companyLogo.public_id,
             };
-            console.log(deleteParams);
+            // console.log(deleteParams);
 
             try {
                 const test = await s3.send(new DeleteObjectCommand(deleteParams));

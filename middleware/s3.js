@@ -17,7 +17,7 @@ const s3 = new S3Client({
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     }
 });
-console.log(s3, "jhg");
+// console.log(s3, "jhg");
 
 const upload = multer({
     storage: multerS3({
