@@ -3,7 +3,7 @@ const { catchAsyncError } = require("../middleware/catchAAsyncError.js");
 const { ErrorHandler } = require("../middleware/error.js");
 const { Experience } = require("../models/experienceSchema.js");
 const { User } = require("../models/userSchema.js");
-const s3 = require("../middleware/s3.js")
+const { s3 } = require("../middleware/s3.js")
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -67,32 +67,32 @@ exports.updateExperience = catchAsyncError(async (req, res, next) => {
         to: req.body.to
     };
 
-    if (req.files && req.files.companyLogo) {
+    if (req.files && req.files.companyLogo && req.files.companyLogo[0]) {
+        const companyLogo = req.files.companyLogo[0];
+
+        // Delete old logo if exists
         if (experience.companyLogo && experience.companyLogo.public_id) {
             const deleteParams = {
                 Bucket: process.env.AWS_BUCKET_NAME,
                 Key: experience.companyLogo.public_id,
             };
-            // console.log(deleteParams);
 
             try {
-                const test = await s3.send(new DeleteObjectCommand(deleteParams));
-                console.log(test, "kljh");
-                
+                const deleteResponse = await s3.send(new DeleteObjectCommand(deleteParams));
+                console.log("Old company logo deleted:", deleteResponse);
             } catch (error) {
-                console.log(error);
-
+                console.error("Error deleting old company logo:", error);
                 return next(new ErrorHandler(`Failed to delete old company logo: ${error.message}`, 500));
-                
             }
         }
 
-        const companyLogo = req.files.companyLogo[0];
+        // Update with the new logo details
         updateExperienceData.companyLogo = {
             public_id: companyLogo.key,
             url: companyLogo.location,
         };
     }
+
 
     try {
         const updatedExperience = await Experience.findByIdAndUpdate(id, updateExperienceData, {

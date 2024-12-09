@@ -153,3 +153,19 @@ exports.deleteProject = catchAsyncError(async (req, res, next) => {
         message: "Project deleted successfully!",
     });
 });
+
+exports.getOneProject = catchAsyncError(async (req, res, next) => {
+    const id = req.params.id;
+    console.log(id);
+
+    const project = await Project.findById(id)
+    if (!project) {
+        return (next(
+            new ErrorHandler("Project details not found", 400)
+        ));
+    }
+    res.status(200).json({
+        success: true,
+        project,
+    });
+})

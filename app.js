@@ -19,7 +19,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: [process.env.PROTFOLIO_URL, process.env.DASHBOARD_URL, "http://localhost:5173","https://adminprotfolio78.vercel.app", "*"],
+        origin: [process.env.PROTFOLIO_URL, process.env.DASHBOARD_URL, "http://localhost:5173","https://adminprotfolio78.vercel.app", "http://localhost:5174"],
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true,
     })
@@ -37,6 +37,7 @@ app.use("/api/v1/softwareapplication", softwareAppRoute);
 app.use("/api/v1/project", projectRouter);
 app.use("/api/v1/skill", skillsRouter);
 app.use("/api/v1/expernince", experninceRouter);
+
 
 
 databaseConnection()

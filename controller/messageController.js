@@ -1,19 +1,47 @@
 const { catchAsyncError } = require("../middleware/catchAAsyncError.js");
 const { ErrorHandler } = require("../middleware/error.js");
 const { Message } = require("../models/messageSchema.js");
+const nodemailer = require("nodemailer");
+const dotenv = require('dotenv');
+dotenv.config();
 
 exports.sendMessage = catchAsyncError(async (req, res, next) => {
-    const { senderName, subject, message } = req.body;
-    if (!senderName || !subject || !message) {
+    const { senderName, email, message } = req.body;
+
+    if (!senderName || !email || !message) {
         return next(new ErrorHandler("Please Fill Full Form!", 400));
     }
-    const data = await Message.create({ senderName, subject, message });
-    res.status(201).json({
-        success: true,
-        message: "Message Sent",
-        data,
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER_EMAIL,
+            pass: process.env.EMAIL_PASS_CODE,
+        },
     });
+
+    const mailOptions = {
+        from: email,
+        to: ["mahipalsingh450@gmail.com"],
+        subject: `New message from ${senderName}`,
+        text: message,
+    };
+    try {
+        await transporter.sendMail(mailOptions);
+
+        const data = await Message.create({ senderName, email, message });
+
+        res.status(201).json({
+            success: true,
+            message: "Message sent successfully and saved to the database.",
+            data,
+        });
+    } catch (error) {
+        console.error("Error occurred:", error);
+        return next(new ErrorHandler("Failed to send message. Please try again.", 500));
+    }
 });
+
 
 exports.getAllMessage = catchAsyncError(async (req, res, next) => {
     const messages = await Message.find();
