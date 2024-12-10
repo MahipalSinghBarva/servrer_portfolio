@@ -91,7 +91,7 @@ exports.login = catchAsyncError(async (req, res, next) => {
     if (!isPasswordMatched) {
         return next(new ErrorHandler("Invalid Email or Password", 401));
     }
-    console.log(generateToken, "generateToken");
+    console.log(generateToken(), "generateToken");
 
     generateToken(user, "Login Successfully", 200, res);
 });
