@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-export const isAuthenticated = catchAsyncError(async (req, res, next) => {
+const isAuthenticated = catchAsyncError(async (req, res, next) => {
     const { token } = req.cookies;
 
     if (!token) {
@@ -27,3 +27,4 @@ export const isAuthenticated = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler("Invalid or expired token", 401));
     }
 });
+module.exports.isAuthenticated = isAuthenticated
