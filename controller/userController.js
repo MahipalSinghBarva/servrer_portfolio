@@ -72,22 +72,26 @@ exports.register = catchAsyncError(async (req, res, next) => {
 exports.login = catchAsyncError(async (req, res, next) => {
     const { email, password } = req.body;
 
-    // Validate email and password
+    console.log(email, "email");
+    console.log(password, "password");
+
     if (!email || !password) {
         return next(new ErrorHandler("Provide Email & Password", 400));
     }
 
-    // Find user in the database and explicitly select the password
+
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
         return next(new ErrorHandler("Invalid Email or Password", 404));
     }
+    console.log(user, "user");
 
 
     const isPasswordMatched = await user.comparePassword(password);
     if (!isPasswordMatched) {
         return next(new ErrorHandler("Invalid Email or Password", 401));
     }
+    console.log(generateToken, "generateToken");
 
     generateToken(user, "Login Successfully", 200, res);
 });
@@ -270,7 +274,7 @@ exports.getUserForPortfolio = catchAsyncError(async (req, res, next) => {
     const id = "66fe6caacb0105a3e8cf4cfb"
     const user = await User.findById(id);
     res.status(200).json({
-      success: true,
-      user,
+        success: true,
+        user,
     });
-  });
+});
