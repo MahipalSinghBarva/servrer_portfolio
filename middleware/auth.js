@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-exports.isAuthenticated = catchAsyncError(async (req, res, next) => {
+export const isAuthenticated = catchAsyncError(async (req, res, next) => {
     const { token } = req.cookies;
 
     if (!token) {
