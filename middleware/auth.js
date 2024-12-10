@@ -4,7 +4,12 @@ const ErrorHandler = require("../middleware/error.js");
 const jwt = require("jsonwebtoken");
 
 exports.isAuthenticated = catchAsyncError(async (req, res, next) => {
+    console.log(req.cookies, "COOKIES");
+    
     const { token } = req.cookies;
+    console.log(token, "TOKEN");
+    console.log(process.env.JWT_SECRET_KEY, "KEY");
+
     if (!token) {
         return next(new ErrorHandler("User not authenticated", 401));
     }

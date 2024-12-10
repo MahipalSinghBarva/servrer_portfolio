@@ -19,7 +19,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: [process.env.PROTFOLIO_URL, process.env.DASHBOARD_URL, "http://localhost:5173","https://adminprotfolio78.vercel.app", "http://localhost:5174"],
+        origin: [process.env.PROTFOLIO_URL, process.env.DASHBOARD_URL, "http://localhost:5173", "https://adminprotfolio78.vercel.app", "http://localhost:5174", "https://adminportfolio.netlify.app"],
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true,
     })
